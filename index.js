@@ -1,11 +1,15 @@
 import Tank from "./tank.js";
-import { PlayerTank } from "./AssetModule.js";
+import Enemy from "./Enemy.js";
+import { PlayerTank, EnemyTank } from "./AssetModule.js";
+import EnemyController from "./EnemyController.js";
+import { Screenwidth, Screenheight } from "./GLOBAL.js";
 const canvas = document.getElementById("game");
 const audio = document.getElementById("audio");
 const ctx = canvas.getContext("2d");
-const width = (canvas.width = 1200);
-const height = (canvas.height = 700);
+const width = (canvas.width = Screenwidth);
+const height = (canvas.height = Screenheight);
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const enemyTankBuild = EnemyTank("D", "1", "2");
 const background = new Image();
 const { hull, tracks, weapone } = PlayerTank;
 const tank = new Tank(
@@ -17,9 +21,23 @@ const tank = new Tank(
   audioContext,
   hull,
   tracks,
-  weapone
+  weapone,
+  width,
+  height
+);
+const enemyTank = new Enemy(
+  600,
+  0,
+  80,
+  80,
+  enemyTankBuild.hull,
+  enemyTankBuild.tracks,
+  enemyTankBuild.weapone,
+  width,
+  height
 );
 
+const enemyController = new EnemyController(enemyTank);
 background.src = "images/ground.jpg";
 
 function handleKeyDown(event) {
@@ -75,11 +93,13 @@ document.addEventListener("keydown", (event) => {
 function gameLoop() {
   ctx.clearRect(0, 0, width, height);
   ctx.drawImage(background, 0, 0, width, height);
-
+  enemyController.draw(ctx);
   tank.draw(ctx);
-  tank.bullets.forEach((bullet) => {
+  tank.bullets.forEach((bullet, index) => {
     bullet.move();
     bullet.draw(ctx);
+    bullet.removeBullet(bullet.x, bullet.y, index);
+    enemyTank.getHit(bullet.x, bullet.y);
   });
   requestAnimationFrame(gameLoop);
 }
