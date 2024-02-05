@@ -104,7 +104,8 @@ function gameLoop() {
   enemyTank.enemyBullets.forEach((bullet, index) => {
     bullet.move()
     bullet.draw(ctx)
-    console.log(enemyTank.enemyBullets.length)
+    // console.log(enemyTank.enemyBullets.length)
+    // TO DO add remove bullet function
     tank.getHit(bullet.x, bullet.y)
   })
   requestAnimationFrame(gameLoop)
