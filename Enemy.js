@@ -48,29 +48,56 @@ export default class Enemy {
     this.drawTank(ctx);
   }
 
-  enemyRandomMovmentMap = ["left", "right", "up", "down"];
-
+  enemyRandomMovmentMap = [
+    "left",
+    "right",
+    "up",
+    "down",
+    "left",
+    "right",
+    "up",
+    "down",
+  ];
+  enemyRandomMapperBool = [true, true, false, false, true, true];
   currentDirectionTimer = 0;
   randomDirection = 0;
   timeSetterIntervalId = null;
+  timeBoolTimerIntervalId = null;
   timeSetter() {
     if (this.timeSetterIntervalId !== null) {
       clearInterval(this.timeSetterIntervalId);
     }
 
     this.timeSetterIntervalId = setInterval(() => {
-      this.randomDirection = Math.floor(Math.random() * 4);
+      this.randomDirection = Math.floor(Math.random() * 8);
+    }, 100);
+  }
+  setBoolTimer() {
+    if (this.timeBoolTimerIntervalId !== null) {
+      clearInterval(this.timeBoolTimerIntervalId);
+    }
+
+    const boolRandom = Math.floor(
+      Math.random() * this.enemyRandomMapperBool.length
+    );
+
+    this.timeBoolTimerIntervalId = setInterval(() => {
+      if (this.enemyRandomMapperBool[boolRandom]) {
+        console.log(this.enemyRandomMapperBool[boolRandom]);
+        this.randomDirection = Math.floor(Math.random() * 8);
+      }
     }, 20);
   }
   randomMovement() {
     switch (this.enemyRandomMovmentMap[this.randomDirection]) {
       case "left":
+        console.log("left");
         if (this.x - this.velocity > 0) {
-          this.x -= this.velocity;
           this.rotation = -Math.PI / 2;
+          this.x -= this.velocity;
           this.timeSetter();
-          console.log("left");
         }
+        this.setBoolTimer();
 
         break;
       case "right":
@@ -78,24 +105,30 @@ export default class Enemy {
           this.x += this.velocity;
           this.rotation = Math.PI / 2;
           this.timeSetter();
+
           console.log("r");
         }
+        this.setBoolTimer();
         break;
       case "up":
         if (this.y - this.velocity >= 0) {
           this.rotation = 0;
           this.y -= this.velocity;
           this.timeSetter();
+
           console.log("u");
         }
+        this.setBoolTimer();
         break;
       case "down":
         if (this.y + this.velocity < this.canvasHeight - 60) {
           this.rotation = Math.PI;
           this.y += this.velocity;
           this.timeSetter();
+
           console.log("d");
         }
+        this.setBoolTimer();
         break;
       default:
         break;
