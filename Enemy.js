@@ -104,7 +104,7 @@ export default class Enemy {
         this.isShoot[this.randomShoot] = false
         this.isShoot[this.randomShoot + 1] = true
         stateManager.addEnemyBullets(bullet)
-      }, 20)
+      }, 10)
     }
   }
   randomMovement() {
