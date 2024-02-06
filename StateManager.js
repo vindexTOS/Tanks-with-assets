@@ -5,38 +5,38 @@ class StateManager {
         bullets: [],
         enemyBullets: [],
         tankLives: 3,
-      }
-      StateManager.instance = this
+      };
+      StateManager.instance = this;
     }
-    return StateManager.instance
+    return StateManager.instance;
   }
   removeLife() {
-    this.sharedState.tankLives--
+    this.sharedState.tankLives--;
   }
 
   addLife() {
-    this.sharedState.tankLives++
+    this.sharedState.tankLives++;
   }
 
   addBullet(bullet) {
-    this.sharedState.bullets.push(bullet)
+    this.sharedState.bullets.push(bullet);
   }
 
   removeBullet(index) {
-    this.sharedState.bullets.splice(index, 1)
+    this.sharedState.bullets.splice(index, 1);
   }
 
   addEnemyBullets(bullet) {
-    this.sharedState.enemyBullets.push(bullet)
+    this.sharedState.enemyBullets.push(bullet);
   }
   removeEnemyBullet(index) {
-    this.sharedState.enemyBullets.slice(index, 1)
+    this.sharedState.enemyBullets.splice(index, 1);
   }
   getSharedState() {
-    return this.sharedState
+    return this.sharedState;
   }
 }
 
 // Usage
-const stateManager = new StateManager()
-export default stateManager
+const stateManager = new StateManager();
+export default stateManager;

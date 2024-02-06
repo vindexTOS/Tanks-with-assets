@@ -1,9 +1,9 @@
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 export const PlayerTank = {
-  hull: `${PngUrl}Hulls_Color_C/Hull_02.png`,
+  hull: `${PngUrl}Hulls_Color_A/Hull_01.png`,
   tracks: [`${PngUrl}Tracks/Track_1_A.png`, `${PngUrl}Tracks/Track_2_A.png`],
-  weapone: `${PngUrl}Weapon_Color_C/Gun_01.png`,
+  weapone: `${PngUrl}Weapon_Color_D/Gun_08.png`,
 };
 
 export const EnemyTank = (color, hull, weapon) => {
@@ -22,6 +22,9 @@ export const AnimationsModlue = {
   fireFlameAnimation: new Array(9)
     .fill("")
     .map((val, i) => `${EffectUrl}Sprite_Fire_Shots_Flame_00${i}.png`),
+  hitExplosion: ["A", "B"].map(
+    (val) => `${PngUrl}Effects/Explosion_${val}.png`
+  ),
 };
 
 export const BulletModule = {
