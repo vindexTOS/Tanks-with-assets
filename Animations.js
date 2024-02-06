@@ -11,6 +11,8 @@ export default class Animations {
     this.hitExp = AnimationsModlue.hitExplosion;
     this.hit = new Image();
     this.hit.src = AnimationsModlue.hitExplosion[0];
+    this.explotion = new Image();
+    this.explotion.src = AnimationsModlue.tankExploted[0];
   }
   drawLifeHearts(ctx) {
     new Array(this.lifes).fill("images/life.png").map((val, i) => {
@@ -22,6 +24,17 @@ export default class Animations {
       ctx.drawImage(image, xCoordinate, -this.height / 600, 50, 50);
       this.lifes = stateManager.getSharedState().tankLives;
     });
+  }
+
+  tankExplotion(ctx) {
+    ctx.save();
+    AnimationsModlue.tankExploted.forEach((val) => {
+      this.explotion.src = val;
+
+      ctx.drawImage(this.explotion, -this.width / 2, -this.height / 2, 55, 55);
+    });
+
+    ctx.restore();
   }
   explosionAnimation(ctx) {
     ctx.save();

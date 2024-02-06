@@ -170,7 +170,9 @@ export default class Enemy {
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate(this.rotation);
-
+    if (this.enemyTankLife <= 0) {
+      this.animationModule.tankExplotion(ctx);
+    }
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];

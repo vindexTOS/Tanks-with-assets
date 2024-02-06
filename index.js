@@ -30,7 +30,7 @@ const tank = new Tank(
   height
 );
 
-background.src = "images/ground.jpg";
+background.style.color = "images/ground.jpg";
 
 // function handleKeyDown(event) {
 //   switch (event.code) {

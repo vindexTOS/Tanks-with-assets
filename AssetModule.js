@@ -25,6 +25,9 @@ export const AnimationsModlue = {
   hitExplosion: ["A", "B"].map(
     (val) => `${PngUrl}Effects/Explosion_${val}.png`
   ),
+  tankExploted: ["A", "B", "C", "D", "E", "F", "G", "H"].map(
+    (val) => `${PngUrl}Effects/Explosion_${val}.png`
+  ),
 };
 
 export const BulletModule = {
