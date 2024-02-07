@@ -1,5 +1,5 @@
 import { AnimationsModlue } from "./AssetModule.js";
-import stateManager from "./StateManager.js";
+import stateManager from "../Store/StateManager.js";
 export default class Animations {
   constructor() {
     this.width = 550;
@@ -15,7 +15,7 @@ export default class Animations {
     this.explotion.src = AnimationsModlue.tankExploted[0];
   }
   drawLifeHearts(ctx) {
-    new Array(this.lifes).fill("images/life.png").map((val, i) => {
+    new Array(this.lifes).fill("assets/images/life.png").map((val, i) => {
       let image = new Image();
       image.src = val;
 

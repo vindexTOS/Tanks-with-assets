@@ -1,7 +1,7 @@
 import Bullet from "./bullet.js";
-import Animations from "./Animations.js";
-import { AnimationsModlue } from "./AssetModule.js";
-import stateManager from "./StateManager.js";
+import Animations from "../Animations/Animations.js";
+import { AnimationsModlue } from "../Animations/AssetModule.js";
+import stateManager from "../Store/StateManager.js";
 export default class Tank {
   rightPressed = false;
   leftPressed = false;
@@ -41,7 +41,7 @@ export default class Tank {
     this.gainNode = this.audioContext.createGain();
     this.audioBuffer.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.loadAudio("audio/tigermoving.mp3");
+    this.loadAudio("assets/audio/tigermoving.mp3");
 
     this.bullets = stateManager.getSharedState().bullets;
     this.lifes = stateManager.getSharedState().tankLives;
@@ -80,7 +80,7 @@ export default class Tank {
     this.isShoot = false;
     console.log(this.bullets);
     // Create a new Audio instance for each shot
-    const shootingAudio = new Audio("audio/tankshoot.mp3");
+    const shootingAudio = new Audio("assets/audio/tankshoot.mp3");
 
     const bullet = new Bullet(
       this.x + this.width / 2,
@@ -99,7 +99,7 @@ export default class Tank {
 
     stateManager.addBullet(bullet);
   }
-  hitTreshhold = 30;
+  hitTreshhold = 40;
   isHit = false;
   getHit(x, y, index) {
     const adjustedX = x - (this.x + this.width / 2);
@@ -108,7 +108,7 @@ export default class Tank {
       Math.abs(adjustedX) <= this.hitTreshhold &&
       Math.abs(adjustedY) <= this.hitTreshhold
     ) {
-      const gettingHit = new Audio("audio/GettingHit.mp3");
+      const gettingHit = new Audio("assets/audio/GettingHit.mp3");
       this.isHit = true;
       stateManager.removeEnemyBullet(index);
       stateManager.removeLife();

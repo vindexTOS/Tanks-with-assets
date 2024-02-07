@@ -1,7 +1,7 @@
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 
-import { Screenwidth, Screenheight } from "../GLOBAL.js";
+import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 const Hull = (color, hull) => {
   return `assets/PNG/Hulls_Color_${color}/Hull_0${hull}.png`;

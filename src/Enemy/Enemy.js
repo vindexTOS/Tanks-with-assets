@@ -1,8 +1,8 @@
-import Animations from "./Animations.js";
-import { AnimationsModlue } from "./AssetModule.js";
-import Bullet from "./bullet.js";
-import stateManager from "./StateManager.js";
-import { Screenwidth, Screenheight } from "./GLOBAL.js";
+import Animations from "../Animations/Animations.js";
+import { AnimationsModlue } from "../Animations/AssetModule.js";
+import Bullet from "../Player/bullet.js";
+import stateManager from "../Store/StateManager.js";
+import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 export default class Enemy {
   enemyTankLife = 3;
@@ -66,6 +66,7 @@ export default class Enemy {
   currentDirectionTimer = 0;
   randomDirection = Math.floor(Math.random() * 3);
   timeSetterIntervalId = null;
+  timeRandomShootIntervalId = null;
   randomShoot = 0;
 
   timeSetter() {
@@ -76,36 +77,50 @@ export default class Enemy {
     this.timeSetterIntervalId = setInterval(() => {
       this.randomDirection = Math.floor(Math.random() * 8);
       this.randomShoot = Math.floor(Math.random() * this.isShoot.length);
+
       setTimeout(() => {
         this.randomDirection = Math.floor(Math.random() * 8);
       }, 200);
     }, 100);
   }
 
+  randomShooting() {
+    if (this.timeRandomShootIntervalId === null) {
+      this.timeRandomShootIntervalId = setInterval(() => {
+        this.randomShoot = Math.floor(Math.random() * this.isShoot.length);
+        setTimeout(() => {
+          this.randomShoot = Math.floor(Math.random() * this.isShoot.length);
+        }, 200);
+      }, 100);
+    } else {
+      clearInterval(this.timeRandomShootIntervalId);
+      this.timeRandomShootIntervalId = null;
+    }
+  }
+
   shootTimeIntervalId = null;
   shoot() {
     // this.isShoot = false
     // const shootingAudio = new Audio('audio/tankshoot.mp3')
+
     if (this.isShoot[this.randomShoot]) {
-      this.shootTimeIntervalId = setTimeout(() => {
-        const bullet = new Bullet(
-          this.x + this.width / 2,
-          this.y + this.height / 2,
-          5,
-          this.rotation - Math.PI / 2,
-          this.audioContext
-        );
+      const bullet = new Bullet(
+        this.x + this.width / 2,
+        this.y + this.height / 2,
+        1,
+        this.rotation - Math.PI / 2,
+        this.audioContext
+      );
 
-        this.weaponePosition.y = 3.5;
+      this.weaponePosition.y = 3.5;
 
-        setTimeout(() => {
-          // this.playShoot(shootingAudio)
-          this.weaponePosition.y = 3;
-        }, 20);
-        this.isShoot[this.randomShoot] = false;
-        this.isShoot[this.randomShoot + 1] = true;
-        stateManager.addEnemyBullets(bullet);
-      }, 10);
+      // this.playShoot(shootingAudio)
+      this.weaponePosition.y = 3;
+
+      this.isShoot[this.randomShoot] = false;
+      this.isShoot[this.randomShoot - 1] = true;
+      this.isShoot[this.randomShoot + 1] = true;
+      stateManager.addEnemyBullets(bullet);
     }
   }
 
@@ -161,7 +176,7 @@ export default class Enemy {
     ) {
       this.enemyTankLife--;
       stateManager.removeBullet(index);
-      const getHit = new Audio("audio/HitMarker.mp3");
+      const getHit = new Audio("assets/audio/HitMarker.mp3");
       getHit.play();
       this.isHit = true;
     }
@@ -173,12 +188,13 @@ export default class Enemy {
     if (this.enemyTankLife <= 0) {
       this.animationModule.tankExplotion(ctx);
     }
+
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];
       this.randomMovement();
+      this.randomShooting();
       this.shoot();
-
       break;
     }
 

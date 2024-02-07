@@ -1,6 +1,6 @@
-import { BulletModule } from "./AssetModule.js";
-import stateManager from "./StateManager.js";
-import { Screenwidth, Screenheight } from "./GLOBAL.js";
+import { BulletModule } from "../Animations/AssetModule.js";
+import stateManager from "../Store/StateManager.js";
+import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 export default class Bullet {
   constructor(x, y, velocity, angle, audioContext) {

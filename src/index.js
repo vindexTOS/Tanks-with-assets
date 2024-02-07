@@ -1,20 +1,23 @@
-import Tank from "./tank.js";
-import Enemy from "./Enemy.js";
-import { PlayerTank, EnemyTank } from "./AssetModule.js";
-import EnemyController from "./EnemyController.js";
-import { Screenwidth, Screenheight } from "./GLOBAL.js";
-import Animations from "./Animations.js";
+import Tank from "./Player/tank.js";
+import Enemy from "./Enemy/Enemy.js";
+import Block from "./Obstacles/Block.js";
+import { PlayerTank, EnemyTank } from "./Animations/AssetModule.js";
+
+import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
+import Animations from "./Animations/Animations.js";
 import { EnemySwarm } from "./ENEMY_SWARMS/Level_1.js";
+import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
+import LevelOne from "./Levels/Level_1.js";
 const canvas = document.getElementById("game");
 const audio = document.getElementById("audio");
 const ctx = canvas.getContext("2d");
 const width = (canvas.width = Screenwidth);
 const height = (canvas.height = Screenheight);
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const enemyTankBuild = EnemyTank("D", "1", "2");
 const background = new Image();
 const { hull, tracks, weapone } = PlayerTank;
 const animations = new Animations();
+background.src = "assets/images/original.jpg";
 
 const tank = new Tank(
   600,
@@ -30,24 +33,6 @@ const tank = new Tank(
   height
 );
 
-background.style.color = "images/ground.jpg";
-
-// function handleKeyDown(event) {
-//   switch (event.code) {
-//     case "ArrowLeft":
-//       tank.moveLeft();
-//       break;
-//     case "ArrowRight":
-//       tank.moveRight();
-//       break;
-//     case "ArrowUp":
-//       tank.moveUp();
-//       break;
-//     case "ArrowDown":
-//       tank.moveDown();
-//       break;
-//   }
-// }
 const keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -133,27 +118,46 @@ document.addEventListener("keydown", (event) => {
     });
   }
 });
-function gameLoop() {
+const level = new LevelOne(
+  background,
+  enemyTankInstances,
+  tank,
+  audio,
+  Screenwidth,
+  Screenheight,
+  animations,
+  firstLevelBlocks
+);
+let lastTimestamp = 0;
+function gameLoop(timestamp) {
+  const deltaTime = (timestamp - lastTimestamp) / 1000; // Convert to seconds
+  lastTimestamp = timestamp;
   handleMovement();
+
   ctx.clearRect(0, 0, width, height);
   ctx.drawImage(background, 0, 0, width, height);
   tank.draw(ctx);
-
-  enemyTankInstances.forEach((enemy) => {
-    enemy.enemyBullets.forEach((bullet, index) => {
-      bullet.move();
-      bullet.draw(ctx);
-      enemy.removeBullet(bullet.x, bullet.y, index);
-      tank.getHit(bullet.x, bullet.y, index);
-    });
-    tank.bullets.forEach((bullet, index) => {
-      bullet.move();
-      bullet.draw(ctx);
-      bullet.removeBullet(bullet.x, bullet.y, index);
-      enemy.getHit(bullet.x, bullet.y, index);
-    });
-    enemy.drawTank(ctx);
-  });
+  level.draw(ctx);
+  // enemyTankInstances.forEach((enemy) => {
+  //   enemy.enemyBullets.forEach((bullet, index) => {
+  //     bullet.move();
+  //     bullet.draw(ctx);
+  //     enemy.removeBullet(bullet.x, bullet.y, index);
+  //     tank.getHit(bullet.x, bullet.y, index);
+  //   });
+  //   tank.bullets.forEach((bullet, index) => {
+  //     bullet.move();
+  //     bullet.draw(ctx);
+  //     bullet.removeBullet(bullet.x, bullet.y, index);
+  //     enemy.getHit(bullet.x, bullet.y, index);
+  //   });
+  //   enemy.drawTank(ctx);
+  // });
+  // firstLevelBlocks.map((block) => {
+  //   const { x, y, width, height, color } = block;
+  //   let newblock = new Block(x, y, width, height, color);
+  //   newblock.draw(ctx);
+  // });
 
   animations.drawLifeHearts(ctx);
   requestAnimationFrame(gameLoop);
