@@ -19,20 +19,6 @@ const { hull, tracks, weapone } = PlayerTank;
 const animations = new Animations();
 background.src = "assets/images/original.jpg";
 
-const tank = new Tank(
-  600,
-  600,
-  80,
-  80,
-  audio,
-  audioContext,
-  hull,
-  tracks,
-  weapone,
-  width,
-  height
-);
-
 const keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -79,33 +65,6 @@ function handleMovement() {
     tank.stopAudio();
   }
 }
-
-const enemyTankInstances = EnemySwarm.map((enemyTank) => {
-  const {
-    x,
-    y,
-    tankWidth,
-    tankHeight,
-    hullSrc,
-    tracksSrc,
-    weaponSrc,
-
-    velocity,
-  } = enemyTank;
-
-  return new Enemy(
-    x,
-    y,
-    tankWidth,
-    tankHeight,
-    hullSrc,
-    tracksSrc,
-    weaponSrc,
-    width,
-    height,
-    velocity
-  );
-});
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("keydown", (event) => {
@@ -118,7 +77,51 @@ document.addEventListener("keydown", (event) => {
     });
   }
 });
+const tank = new Tank(
+  600,
+  600,
+  80,
+  80,
+  audio,
+  audioContext,
+  hull,
+  tracks,
+  weapone,
+  width,
+  height,
+  firstLevelBlocks
+);
+const enemyTankInstances = EnemySwarm.map((enemyTank) => {
+  const {
+    x,
+    y,
+    tankWidth,
+    tankHeight,
+    hullSrc,
+    tracksSrc,
+    weaponSrc,
+
+    velocity,
+    ObstacleBlocks,
+  } = enemyTank;
+
+  return new Enemy(
+    x,
+    y,
+    tankWidth,
+    tankHeight,
+    hullSrc,
+    tracksSrc,
+    weaponSrc,
+    width,
+    height,
+    velocity,
+    ObstacleBlocks
+  );
+});
+
 const level = new LevelOne(
+  tank,
   background,
   enemyTankInstances,
   tank,
@@ -128,15 +131,13 @@ const level = new LevelOne(
   animations,
   firstLevelBlocks
 );
-let lastTimestamp = 0;
-function gameLoop(timestamp) {
-  const deltaTime = (timestamp - lastTimestamp) / 1000; // Convert to seconds
-  lastTimestamp = timestamp;
+
+function gameLoop() {
   handleMovement();
 
   ctx.clearRect(0, 0, width, height);
   ctx.drawImage(background, 0, 0, width, height);
-  tank.draw(ctx);
+
   level.draw(ctx);
   // enemyTankInstances.forEach((enemy) => {
   //   enemy.enemyBullets.forEach((bullet, index) => {

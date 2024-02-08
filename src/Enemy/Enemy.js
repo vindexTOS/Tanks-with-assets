@@ -21,12 +21,14 @@ export default class Enemy {
     weaponSrc,
     canvasWeidth,
     canvasHeight,
-    velocity
+    velocity,
+    obstacles
   ) {
     this.x = x;
     this.y = y;
     this.width = tankWidth;
     this.velocity = velocity;
+    this.obstacles = obstacles;
     this.height = tankHeight;
     this.canvasHeight = canvasHeight;
     this.canvasWeidth = canvasWeidth;
@@ -107,7 +109,7 @@ export default class Enemy {
       const bullet = new Bullet(
         this.x + this.width / 2,
         this.y + this.height / 2,
-        1,
+        12,
         this.rotation - Math.PI / 2,
         this.audioContext
       );

@@ -3,6 +3,7 @@ import Block from "../Obstacles/Block.js";
 
 export default class LevelOne {
   constructor(
+    player,
     background,
     EnemySwarm,
     tank,
@@ -10,19 +11,21 @@ export default class LevelOne {
     width,
     height,
     animations,
-    firstLevelBlocks
+    ObstacleBlocks
   ) {
-    (this.background = background),
+    (this.player = player),
+      (this.background = background),
       (this.EnemySwarm = EnemySwarm),
       (this.tank = tank),
       (this.audio = audio),
       (this.width = width),
       (this.height = height),
       (this.animations = animations);
-    this.firstLevelBlocks = firstLevelBlocks;
+    this.ObstacleBlocks = ObstacleBlocks;
   }
 
   draw(ctx) {
+    this.player.draw(ctx);
     this.EnemySwarm.forEach((enemy) => {
       enemy.enemyBullets.forEach((bullet, index) => {
         bullet.move();
@@ -40,7 +43,8 @@ export default class LevelOne {
       enemy.drawTank(ctx);
     });
 
-    this.firstLevelBlocks.map((block) => {
+    // Render the blocks after updating bullets and tank actions
+    this.ObstacleBlocks.forEach((block) => {
       const { x, y, width, height, color } = block;
       let newblock = new Block(x, y, width, height, color);
       newblock.draw(ctx);

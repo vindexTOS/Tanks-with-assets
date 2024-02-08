@@ -25,7 +25,8 @@ export default class Tank {
     tracksSrc,
     weaponSrc,
     canvasWeidth,
-    canvasHeight
+    canvasHeight,
+    obstacles
   ) {
     this.x = x;
     this.y = y;
@@ -34,6 +35,7 @@ export default class Tank {
     this.height = tankHeight;
     this.canvasHeight = canvasHeight;
     this.canvasWeidth = canvasWeidth;
+    this.obstacles = obstacles;
     this.rotation = 0;
     this.audioContext = audioContext;
     this.audio = audio;
@@ -85,7 +87,7 @@ export default class Tank {
     const bullet = new Bullet(
       this.x + this.width / 2,
       this.y + this.height / 2,
-      2,
+      9,
       this.rotation - Math.PI / 2,
       this.audioContext
     );
@@ -173,6 +175,39 @@ export default class Tank {
   }
 
   move() {
+    let CheckIfHitObstecal = this.obstacles.find((val) => {
+      const { x, y, width, height } = val;
+
+      const radiusX = width / 2;
+      const radiusY = height / 2;
+
+      const deltaX = this.x - x;
+      const deltaY = this.y - y;
+
+      const combinedRadius =
+        Math.max(this.width / 2, this.height / 2) + Math.max(radiusX, radiusY);
+      console.log(deltaX, deltaY);
+      if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= combinedRadius) {
+        if (deltaX < width - width / 2) {
+          this.x -= 9;
+        }
+        if (deltaX > -width + width / 2) {
+          this.x += 9;
+        }
+        if (deltaY < height - height / 2) {
+          this.y -= 9;
+        }
+
+        if (deltaY > -height + height / 2) {
+          this.y += 9;
+        }
+        return true;
+      }
+
+      return false;
+    });
+
+    // console.log(this.obstacles);
     if (this.lifes > 0) {
       if (this.rightPressed && this.x + this.width < this.canvasWeidth) {
         this.x += this.velocity;
