@@ -13,7 +13,16 @@ export default class Animations {
     this.hit.src = AnimationsModlue.hitExplosion[0];
     this.explotion = new Image();
     this.explotion.src = AnimationsModlue.tankExploted[0];
+    this.currentFrame = 0;
+    this.explodedFrames = AnimationsModlue.tankExploted.map(this.loadImage);
   }
+
+  loadImage(path) {
+    const img = new Image();
+    img.src = path;
+    return img;
+  }
+
   drawLifeHearts(ctx) {
     new Array(this.lifes).fill("assets/images/life.png").map((val, i) => {
       let image = new Image();
@@ -28,17 +37,16 @@ export default class Animations {
 
   tankExplotion(ctx) {
     ctx.save();
-    AnimationsModlue.tankExploted.forEach((val) => {
-      this.explotion.src = val;
 
-      ctx.drawImage(
-        this.explotion,
-        -this.width / 4,
-        -this.height / 4,
-        this.width - 300,
-        this.height - 300
-      );
-    });
+    ctx.drawImage(
+      this.explodedFrames[this.currentFrame],
+      -this.width / 4,
+      -this.height / 4,
+      this.width - 300,
+      this.height - 300
+    );
+
+    this.currentFrame = (this.currentFrame + 1) % this.explodedFrames.length;
 
     ctx.restore();
   }
