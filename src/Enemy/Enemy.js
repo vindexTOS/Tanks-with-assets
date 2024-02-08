@@ -5,7 +5,7 @@ import stateManager from "../Store/StateManager.js";
 import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 export default class Enemy {
-  enemyTankLife = 3;
+  enemyTankLife = 1;
   weaponePosition = {
     x: 5.3,
     y: 3,
@@ -223,12 +223,19 @@ export default class Enemy {
   }
   drawTank(ctx) {
     ctx.save();
+
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+
     ctx.rotate(this.rotation);
     if (this.enemyTankLife <= 0) {
       this.animationModule.tankExplotion(ctx);
     }
-
+    if (this.isHit) {
+      this.animationModule.explosionAnimation(ctx);
+      setTimeout(() => {
+        this.isHit = false;
+      }, 300);
+    }
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];
@@ -255,12 +262,6 @@ export default class Enemy {
       30,
       50
     );
-    if (this.isHit) {
-      this.animationModule.explosionAnimation(ctx);
-      setTimeout(() => {
-        this.isHit = false;
-      }, 300);
-    }
 
     ctx.restore();
   }

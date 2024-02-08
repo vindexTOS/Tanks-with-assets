@@ -31,7 +31,13 @@ export default class Animations {
     AnimationsModlue.tankExploted.forEach((val) => {
       this.explotion.src = val;
 
-      ctx.drawImage(this.explotion, -this.width / 2, -this.height / 2, 55, 55);
+      ctx.drawImage(
+        this.explotion,
+        -this.width / 4,
+        -this.height / 4,
+        this.width - 300,
+        this.height - 300
+      );
     });
 
     ctx.restore();
