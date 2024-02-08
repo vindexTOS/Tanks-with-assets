@@ -45,8 +45,8 @@ export default class LevelBuilder {
 
     // Render the blocks after updating bullets and tank actions
     this.ObstacleBlocks.forEach((block) => {
-      const { x, y, width, height, color } = block;
-      let newblock = new Block(x, y, width, height, color);
+      const { x, y, width, height, imageLink } = block;
+      let newblock = new Block(x, y, width, height, imageLink);
       newblock.draw(ctx);
     });
   }

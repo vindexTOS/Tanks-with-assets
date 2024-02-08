@@ -207,7 +207,9 @@ export default class Enemy {
   getHit(x, y, index) {
     const adjustedX = x - (this.x + this.width / 2);
     const adjustedY = y - (this.y + this.height / 2);
-
+    if (this.enemyTankLife <= 0) {
+      this.weapon.src = "";
+    }
     if (
       Math.abs(adjustedX) <= this.hitTreshhold &&
       Math.abs(adjustedY) <= this.hitTreshhold
