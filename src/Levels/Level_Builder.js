@@ -1,7 +1,7 @@
 import Enemy from "../Enemy/Enemy.js";
 import Block from "../Obstacles/Block.js";
 
-export default class LevelOne {
+export default class LevelBuilder {
   constructor(
     player,
     background,

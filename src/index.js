@@ -7,7 +7,7 @@ import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
 import Animations from "./Animations/Animations.js";
 import { EnemySwarm } from "./ENEMY_SWARMS/Level_1.js";
 import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
-import LevelOne from "./Levels/Level_1.js";
+import LevelBuilder from "./Levels/Level_Builder.js";
 const canvas = document.getElementById("game");
 const audio = document.getElementById("audio");
 const ctx = canvas.getContext("2d");
@@ -102,7 +102,7 @@ const enemyTankInstances = EnemySwarm.map((enemyTank) => {
     weaponSrc,
 
     velocity,
-    ObstacleBlocks,
+    obstacles,
   } = enemyTank;
 
   return new Enemy(
@@ -116,11 +116,11 @@ const enemyTankInstances = EnemySwarm.map((enemyTank) => {
     width,
     height,
     velocity,
-    ObstacleBlocks
+    obstacles
   );
 });
 
-const level = new LevelOne(
+const level = new LevelBuilder(
   tank,
   background,
   enemyTankInstances,

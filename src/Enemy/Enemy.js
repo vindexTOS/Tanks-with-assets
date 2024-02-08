@@ -109,7 +109,7 @@ export default class Enemy {
       const bullet = new Bullet(
         this.x + this.width / 2,
         this.y + this.height / 2,
-        12,
+        3,
         this.rotation - Math.PI / 2,
         this.audioContext
       );
@@ -132,6 +132,42 @@ export default class Enemy {
     }
   }
   randomMovement() {
+    console.log(this.obstacles);
+    this.obstacles?.find((val) => {
+      const { x, y, width, height } = val;
+
+      const radiusX = width / 2;
+      const radiusY = height / 2;
+
+      const deltaX = this.x - x;
+      const deltaY = this.y - y;
+
+      const combinedRadius =
+        Math.max(this.width / 2, this.height / 2) + Math.max(radiusX, radiusY);
+      console.log(deltaX, deltaY);
+      if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= combinedRadius) {
+        if (deltaX < width - width / 2) {
+          this.x -= 9;
+          this.randomDirection = Math.floor(Math.random() * 8);
+        }
+        if (deltaX > -width + width / 2) {
+          this.x += 9;
+          this.randomDirection = Math.floor(Math.random() * 8);
+        }
+        if (deltaY < height - height / 2) {
+          this.y -= 9;
+          this.randomDirection = Math.floor(Math.random() * 8);
+        }
+
+        if (deltaY > -height + height / 2) {
+          this.y += 9;
+          this.randomDirection = Math.floor(Math.random() * 8);
+        }
+        return true;
+      }
+
+      return false;
+    });
     switch (this.enemyRandomMovmentMap[this.randomDirection]) {
       case "left":
         if (this.x - this.velocity > 0) {

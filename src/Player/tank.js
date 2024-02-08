@@ -87,7 +87,7 @@ export default class Tank {
     const bullet = new Bullet(
       this.x + this.width / 2,
       this.y + this.height / 2,
-      9,
+      4,
       this.rotation - Math.PI / 2,
       this.audioContext
     );
@@ -175,7 +175,7 @@ export default class Tank {
   }
 
   move() {
-    let CheckIfHitObstecal = this.obstacles.find((val) => {
+    this.obstacles.find((val) => {
       const { x, y, width, height } = val;
 
       const radiusX = width / 2;
@@ -186,7 +186,7 @@ export default class Tank {
 
       const combinedRadius =
         Math.max(this.width / 2, this.height / 2) + Math.max(radiusX, radiusY);
-      console.log(deltaX, deltaY);
+      // console.log(deltaX, deltaY);
       if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= combinedRadius) {
         if (deltaX < width - width / 2) {
           this.x -= 9;
