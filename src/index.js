@@ -1,14 +1,13 @@
 import Tank from "./Player/tank.js";
-import Enemy from "./Enemy/Enemy.js";
 import Block from "./Obstacles/Block.js";
 import { PlayerTank, EnemyTank } from "./Animations/AssetModule.js";
 import stateManager from "./Store/StateManager.js";
 import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
 import Animations from "./Animations/Animations.js";
-import { EnemySwarm } from "./ENEMY_SWARMS/Level_1.js";
+ 
 import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
 import LevelBuilder from "./Levels/Level_Builder.js";
-
+import { enemyTankInstances } from "./ENEMY_SWARMS/Level_1.js";
 const canvas = document.getElementById("game");
 canvas.style.display = "none";
 const audio = document.getElementById("audio");
@@ -125,38 +124,6 @@ const tank = new Tank(
   height,
   firstLevelBlocks
 );
-const enemyTankInstances = EnemySwarm.map((enemyTank) => {
-  const {
-    x,
-    y,
-    tankWidth,
-    tankHeight,
-    hullSrc,
-    tracksSrc,
-    weaponSrc,
-
-    velocity,
-    obstacles,
-    lives,
-    demage,
-  } = enemyTank;
-
-  return new Enemy(
-    x,
-    y,
-    tankWidth,
-    tankHeight,
-    hullSrc,
-    tracksSrc,
-    weaponSrc,
-    width,
-    height,
-    velocity,
-    obstacles,
-    lives,
-    demage
-  );
-});
 
 const level = new LevelBuilder(
   tank,

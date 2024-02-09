@@ -2,7 +2,7 @@ const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 import { firstLevelBlocks } from "../Obstacles/ObstaclesModel.js";
 import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
-
+import Enemy from "../Enemy/Enemy.js";
 const Hull = (color, hull) => {
   return `assets/PNG/Hulls_Color_${color}/Hull_0${hull}.png`;
 };
@@ -26,7 +26,7 @@ export const EnemySwarm = [
     weaponSrc: Weapone("C", "3"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
     lives: 1,
     demage: 1,
@@ -42,7 +42,7 @@ export const EnemySwarm = [
     weaponSrc: Weapone("C", "3"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
     lives: 1,
     demage: 1,
@@ -58,7 +58,7 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 3,
     obstacles: firstLevelBlocks,
     lives: 1,
     demage: 1,
@@ -74,7 +74,7 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 3,
     obstacles: firstLevelBlocks,
     lives: 1,
     demage: 1,
@@ -89,9 +89,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 4,
     demage: 1,
   },
   {
@@ -105,9 +105,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 2,
     demage: 1,
   },
   {
@@ -121,9 +121,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 2,
     demage: 1,
   },
   {
@@ -137,9 +137,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 2,
     demage: 1,
   },
   {
@@ -153,9 +153,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 2,
     demage: 1,
   },
   {
@@ -169,9 +169,9 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 1,
     obstacles: firstLevelBlocks,
-    lives: 1,
+    lives: 2,
     demage: 1,
   },
   {
@@ -185,9 +185,43 @@ export const EnemySwarm = [
     weaponSrc: Weapone("B", "2"),
     Screenwidth: Screenwidth,
     Screenheight: Screenheight,
-    velocity: 5,
+    velocity: 3,
     obstacles: firstLevelBlocks,
     lives: 1,
     demage: 1,
+  
   },
 ];
+
+export const enemyTankInstances = EnemySwarm.map((enemyTank) => {
+  const {
+    x,
+    y,
+    tankWidth,
+    tankHeight,
+    hullSrc,
+    tracksSrc,
+    weaponSrc,
+
+    velocity,
+    obstacles,
+    lives,
+    demage,
+  } = enemyTank;
+
+  return new Enemy(
+    x,
+    y,
+    tankWidth,
+    tankHeight,
+    hullSrc,
+    tracksSrc,
+    weaponSrc,
+    Screenwidth,
+    Screenheight,
+    velocity,
+    obstacles,
+    lives,
+    demage
+  );
+});
