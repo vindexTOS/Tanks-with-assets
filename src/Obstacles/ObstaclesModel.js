@@ -31,14 +31,14 @@ export const firstLevelBlocks = [
   },
   {
     x: 200,
-    y: 100,
+    y: 200,
     width: 80,
     height: 80,
     imageLink: antitank,
   },
   {
     x: 400,
-    y: 400,
+    y: 300,
     width: 80,
     height: 80,
     imageLink: antitank,

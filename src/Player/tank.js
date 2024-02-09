@@ -14,6 +14,7 @@ export default class Tank {
     x: 5.3,
     y: 3,
   };
+
   constructor(
     x,
     y,
@@ -65,6 +66,12 @@ export default class Tank {
     this.FireFlame = new Image();
     this.FireFlame.src = AnimationsModlue.fireFlameAnimation[1];
     // life
+    this.tankStats = {
+      velocity: 8,
+      lifes: stateManager.getSharedState().tankLives,
+      demage: 0.5,
+      bulletSpeed: 7,
+    };
   }
 
   animationModule = new Animations();
@@ -80,16 +87,17 @@ export default class Tank {
 
   shoot() {
     this.isShoot = false;
-    console.log(this.bullets);
+
     // Create a new Audio instance for each shot
     const shootingAudio = new Audio("assets/audio/tankshoot.mp3");
 
     const bullet = new Bullet(
       this.x + this.width / 2,
       this.y + this.height / 2,
-      4,
+      this.tankStats.bulletSpeed,
       this.rotation - Math.PI / 2,
-      this.audioContext
+      this.audioContext,
+      this.tankStats.demage
     );
 
     this.weaponePosition.y = 3.5;
@@ -114,7 +122,7 @@ export default class Tank {
       this.isHit = true;
       stateManager.removeEnemyBullet(index);
       stateManager.removeLife();
-      this.lifes = stateManager.getSharedState().tankLives;
+      this.tankStats.lifes = stateManager.getSharedState().tankLives;
       gettingHit.play();
     }
   }
@@ -208,15 +216,15 @@ export default class Tank {
     });
 
     // console.log(this.obstacles);
-    if (this.lifes > 0) {
+    if (this.tankStats.lifes > 0) {
       if (this.rightPressed && this.x + this.width < this.canvasWeidth) {
-        this.x += this.velocity;
+        this.x += this.tankStats.velocity;
       } else if (this.leftPressed && this.x >= 0) {
-        this.x -= this.velocity;
+        this.x -= this.tankStats.velocity;
       } else if (this.upPressed && this.y > 0) {
-        this.y -= this.velocity;
+        this.y -= this.tankStats.velocity;
       } else if (this.downPressed && this.y + this.height < this.canvasHeight) {
-        this.y += this.velocity;
+        this.y += this.tankStats.velocity;
       }
     }
   }

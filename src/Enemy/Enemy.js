@@ -5,7 +5,6 @@ import stateManager from "../Store/StateManager.js";
 import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 export default class Enemy {
-  enemyTankLife = 3;
   weaponePosition = {
     x: 5.3,
     y: 3,
@@ -22,7 +21,9 @@ export default class Enemy {
     canvasWeidth,
     canvasHeight,
     velocity,
-    obstacles
+    obstacles,
+    enemyTankLife,
+    demage
   ) {
     this.x = x;
     this.y = y;
@@ -47,6 +48,8 @@ export default class Enemy {
     this.weapon.src = this.weaponSrc;
 
     this.enemyBullets = stateManager.getSharedState().enemyBullets;
+    this.enemyTankLife = enemyTankLife;
+    this.demage = demage;
   }
   hitTreshhold = 40;
   isHit = false;
@@ -112,7 +115,8 @@ export default class Enemy {
         this.y + this.height / 2,
         3,
         this.rotation - Math.PI / 2,
-        this.audioContext
+        this.audioContext,
+        1
       );
 
       this.weaponePosition.y = 3.5;
@@ -204,7 +208,7 @@ export default class Enemy {
     this.currentDirectionTimer = this.timeToChangeDirection;
   }
 
-  getHit(x, y, index) {
+  getHit(x, y, index, demage) {
     const adjustedX = x - (this.x + this.width / 2);
     const adjustedY = y - (this.y + this.height / 2);
     if (this.enemyTankLife <= 0) {
@@ -214,7 +218,7 @@ export default class Enemy {
       Math.abs(adjustedX) <= this.hitTreshhold &&
       Math.abs(adjustedY) <= this.hitTreshhold
     ) {
-      this.enemyTankLife--;
+      this.enemyTankLife -= demage;
       stateManager.removeBullet(index);
       const getHit = new Audio("assets/audio/HitMarker.mp3");
       getHit.play();

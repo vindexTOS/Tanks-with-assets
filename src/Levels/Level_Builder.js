@@ -23,7 +23,7 @@ export default class LevelBuilder {
       (this.animations = animations);
     this.ObstacleBlocks = ObstacleBlocks;
   }
-
+ 
   draw(ctx) {
     this.player.draw(ctx);
     this.EnemySwarm.forEach((enemy) => {
@@ -38,7 +38,7 @@ export default class LevelBuilder {
         bullet.move();
         bullet.draw(ctx);
         bullet.removeBullet(bullet.x, bullet.y, index);
-        enemy.getHit(bullet.x, bullet.y, index);
+        enemy.getHit(bullet.x, bullet.y, index, bullet.demage);
       });
       enemy.drawTank(ctx);
     });

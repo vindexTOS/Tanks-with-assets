@@ -28,6 +28,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 100,
@@ -42,6 +44,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 300,
@@ -56,6 +60,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 900,
@@ -70,6 +76,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 850,
@@ -83,6 +91,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 700,
@@ -97,6 +107,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 650,
@@ -111,6 +123,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 650,
@@ -125,6 +139,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 650,
@@ -139,6 +155,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 650,
@@ -153,6 +171,8 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
   {
     x: 650,
@@ -167,5 +187,7 @@ export const EnemySwarm = [
     Screenheight: Screenheight,
     velocity: 5,
     obstacles: firstLevelBlocks,
+    lives: 1,
+    demage: 1,
   },
 ];

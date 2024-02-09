@@ -32,4 +32,6 @@ export const AnimationsModlue = {
 
 export const BulletModule = {
   mediumShell: `${PngUrl}Effects/Medium_Shell.png`,
+  largeShell: `${PngUrl}Effects/Heavy_Shell.png`,
+  plasma: `${PngUrl}Effects/Plasma.png`,
 };
