@@ -5,7 +5,7 @@ import stateManager from "../Store/StateManager.js";
 import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 
 export default class Enemy {
-  enemyTankLife = 1;
+  enemyTankLife = 3;
   weaponePosition = {
     x: 5.3,
     y: 3,
@@ -50,6 +50,7 @@ export default class Enemy {
   }
   hitTreshhold = 40;
   isHit = false;
+
   animationModule = new Animations();
 
   isShoot = [false, true, false, true, false, true, true, true, true];
@@ -132,7 +133,6 @@ export default class Enemy {
     }
   }
   randomMovement() {
-    console.log(this.obstacles);
     this.obstacles?.find((val) => {
       const { x, y, width, height } = val;
 
@@ -144,7 +144,7 @@ export default class Enemy {
 
       const combinedRadius =
         Math.max(this.width / 2, this.height / 2) + Math.max(radiusX, radiusY);
-      console.log(deltaX, deltaY);
+
       if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= combinedRadius) {
         if (deltaX < width - width / 2) {
           this.x -= 9;
@@ -227,15 +227,7 @@ export default class Enemy {
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
 
     ctx.rotate(this.rotation);
-    if (this.enemyTankLife <= 0) {
-      this.animationModule.tankExplotion(ctx);
-    }
-    if (this.isHit) {
-      this.animationModule.explosionAnimation(ctx);
-      setTimeout(() => {
-        this.isHit = false;
-      }, 300);
-    }
+
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];
@@ -262,7 +254,15 @@ export default class Enemy {
       30,
       50
     );
-
+    if (this.isHit) {
+      this.animationModule.explosionAnimation(ctx);
+      setTimeout(() => {
+        this.isHit = false;
+      }, 300);
+    }
+    if (this.enemyTankLife <= 0) {
+      this.animationModule.tankExplotion(ctx, this.enemyTankLife);
+    }
     ctx.restore();
   }
 }

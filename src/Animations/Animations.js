@@ -16,7 +16,7 @@ export default class Animations {
     this.currentFrame = 0;
     this.explodedFrames = AnimationsModlue.tankExploted.map(this.loadImage);
   }
-
+  isExplosionPlayed = true;
   loadImage(path) {
     const img = new Image();
     img.src = path;
@@ -36,19 +36,26 @@ export default class Animations {
   }
 
   tankExplotion(ctx) {
-    ctx.save();
+    if (this.isExplosionPlayed) {
+      const explode = new Audio("assets/audio/tankexpoloded.mp3");
+      explode.play();
+      ctx.save();
+      ctx.rotate(Math.PI);
+      ctx.drawImage(
+        this.explodedFrames[this.currentFrame],
+        -this.width / 5,
+        -this.height / 5,
+        this.width - 350,
+        this.height - 320
+      );
 
-    ctx.drawImage(
-      this.explodedFrames[this.currentFrame],
-      -this.width / 4,
-      -this.height / 4,
-      this.width - 300,
-      this.height - 300
-    );
+      this.currentFrame = (this.currentFrame + 1) % this.explodedFrames.length;
 
-    this.currentFrame = (this.currentFrame + 1) % this.explodedFrames.length;
-
-    ctx.restore();
+      ctx.restore();
+      setTimeout(() => {
+        this.isExplosionPlayed = false;
+      }, 200);
+    }
   }
   explosionAnimation(ctx) {
     ctx.save();
