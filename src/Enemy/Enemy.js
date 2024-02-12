@@ -10,6 +10,7 @@ export default class Enemy {
     y: 3,
   };
   constructor(
+    id,
     x,
     y,
     tankWidth,
@@ -23,8 +24,10 @@ export default class Enemy {
     velocity,
     obstacles,
     enemyTankLife,
-    demage
+    demage,
+    EndlessSurvior
   ) {
+    this.id = id;
     this.x = x;
     this.y = y;
     this.width = tankWidth;
@@ -37,7 +40,7 @@ export default class Enemy {
     this.hullSrc = hullSrc;
     this.tracksSrc = tracksSrc;
     this.weaponSrc = weaponSrc;
-
+    this.EndlessSurvior = EndlessSurvior;
     this.hull = new Image();
     this.hull.src = this.hullSrc;
     this.tracks = new Image();
@@ -213,13 +216,15 @@ export default class Enemy {
     const adjustedY = y - (this.y + this.height / 2);
     if (this.enemyTankLife <= 0) {
       this.weapon.src = "";
+      this.EndlessSurvior(this.id, false);
     }
     if (
       Math.abs(adjustedX) <= this.hitTreshhold &&
       Math.abs(adjustedY) <= this.hitTreshhold
     ) {
       this.enemyTankLife -= demage;
-      stateManager.removeBullet(index);
+
+      stateManager.removeBullet(index, demage);
       const getHit = new Audio("assets/audio/HitMarker.mp3");
       getHit.play();
       this.isHit = true;
@@ -231,7 +236,6 @@ export default class Enemy {
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
 
     ctx.rotate(this.rotation);
-
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];

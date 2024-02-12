@@ -5,6 +5,7 @@ class StateManager {
         bullets: [],
         enemyBullets: [],
         tankLives: 3,
+        enemySwarm: [],
       };
       StateManager.instance = this;
     }
@@ -34,6 +35,10 @@ class StateManager {
   }
   getSharedState() {
     return this.sharedState;
+  }
+
+  setEnemySwarm(newSwarm) {
+    this.sharedState.enemySwarm = newSwarm;
   }
 }
 

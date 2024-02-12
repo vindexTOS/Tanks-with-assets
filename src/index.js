@@ -4,10 +4,9 @@ import { PlayerTank, EnemyTank } from "./Animations/AssetModule.js";
 import stateManager from "./Store/StateManager.js";
 import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
 import Animations from "./Animations/Animations.js";
- 
 import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
-import LevelBuilder from "./Levels/Level_Builder.js";
-import { enemyTankInstances } from "./ENEMY_SWARMS/Level_1.js";
+import SurvivalLevel from "./ENEMY_SWARMS/Level_1.js";
+
 const canvas = document.getElementById("game");
 canvas.style.display = "none";
 const audio = document.getElementById("audio");
@@ -73,10 +72,10 @@ let stats = document.getElementById("stats");
 stats.style.display = "flex";
 let menu = document.getElementById("menu");
 let start = false;
+
 const startBtn = document.getElementById("start");
 startBtn.addEventListener("click", () => {
   start = true;
-
   requestAnimationFrame(gameLoop);
   menu.style.display = "none";
   canvas.style.display = "flex";
@@ -86,7 +85,7 @@ startBtn.addEventListener("click", () => {
 
 function drawHeart() {
   const numLives = stateManager.getSharedState().tankLives;
-  console.log(numLives);
+
   document.getElementById("stats").innerHTML = "";
 
   for (let i = 0; i < numLives; i++) {
@@ -124,26 +123,15 @@ const tank = new Tank(
   height,
   firstLevelBlocks
 );
-
-const level = new LevelBuilder(
-  tank,
-  background,
-  enemyTankInstances,
-  tank,
-  audio,
-  Screenwidth,
-  Screenheight,
-  animations,
-  firstLevelBlocks
-);
-
+const survivalLevel = new SurvivalLevel(tank, background, audio, animations);
 function gameLoop() {
   if (start) {
     handleMovement();
     drawHeart();
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(background, 0, 0, width, height);
-    level.draw(ctx);
+
+    survivalLevel.drawLevel(ctx);
 
     // animations.drawLifeHearts(ctx);
     requestAnimationFrame(gameLoop);

@@ -69,7 +69,7 @@ export default class Tank {
     this.tankStats = {
       velocity: 8,
       lifes: stateManager.getSharedState().tankLives,
-      demage: 0.5,
+      demage: 1,
       bulletSpeed: 7,
     };
   }
