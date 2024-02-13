@@ -132,19 +132,55 @@
         box-shadow: 0 0 5px #ff1f71, 0 0 15px #ff1f71, 0 0 30px #ff1f71,
           0 0 60px #ff1f71;
       }
+      #money,
+      #storeOpen,
+      #pause {
+        color: white;
+        cursor: pointer;
+      }
+      #store {
+        display: flex;
+        top: 10;
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background-color: #291231;
+      }
       #stats {
+        display: flex;
+        flex-direction: column;
         position: absolute;
         right: 20px;
         top: 10px;
-        background-color: #350048;
+        background-color: #000000;
+      }
+      #enemyTanks {
+        background-color: rgb(249, 247, 247);
+        display: flex;
+        flex-wrap: wrap;
+        width: 150px;
+      }
+      #rounds {
+        color: white;
       }
     </style>
   </head>
 
   <body>
     <canvas id="game"></canvas>
-    <div id="stats"></div>
-     <script type="module" src="index.js"></script>
+    <div id="stats">
+      <div id="pause">pause</div>
+      <div id="storeOpen">STORE</div>
+      <div id="lives"></div>
+      <div id="enemyTanks"></div>
+      <div id="rounds"></div>
+      <div id="money"></div>
+    </div>
+    <div id="store">
+      <button id="close-store">Close</button>
+    </div>
+    <script type="module" src="index.js"></script>
+    <!-- <script type="module" src="DOMcontroll.js"></script> -->
 
     <audio id="audio" controls></audio>
 

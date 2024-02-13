@@ -3,6 +3,7 @@ import { Screenwidth, Screenheight } from "../Globals/GLOBAL.js";
 import Enemy from "../Enemy/Enemy.js";
 import LevelBuilder from "../Levels/Level_Builder.js";
 import stateManager from "../Store/StateManager.js";
+import Drops from "../Drops/Drops.js";
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 
@@ -16,6 +17,19 @@ const Tracks = [
   `${PngUrl}Tracks/Track_1_A.png`,
   `${PngUrl}Tracks/Track_2_A.png`,
 ];
+
+let drops = [
+  {
+    y: 500,
+    x: 500,
+    width: 60,
+    height: 60,
+    img: "assets/images/XP.png",
+    type: "xp",
+    value: 3000,
+  },
+];
+
 let EnemySwarm = [
   {
     id: 0,
@@ -70,6 +84,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 1,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 3,
@@ -87,6 +102,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 1,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 4,
@@ -103,6 +119,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 4,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 5,
@@ -120,6 +137,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 2,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 6,
@@ -137,6 +155,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 2,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 7,
@@ -154,6 +173,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 2,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 8,
@@ -171,6 +191,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 2,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 9,
@@ -188,6 +209,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 2,
   //   demage: 1,
+  //   isAlive: true,
   // },
   // {
   //   id: 10,
@@ -205,6 +227,7 @@ let EnemySwarm = [
   //   obstacles: firstLevelBlocks,
   //   lives: 1,
   //   demage: 1,
+  //   isAlive: true,
   // },
 ];
 export default class SurvivalLevel {
@@ -232,6 +255,7 @@ export default class SurvivalLevel {
         obstacles,
         lives,
         demage,
+        isAlive,
       } = enemyTank;
 
       return new Enemy(
@@ -249,7 +273,8 @@ export default class SurvivalLevel {
         obstacles,
         lives,
         demage,
-        this.EndlessSurvior
+        this.EndlessSurvior,
+        isAlive
       );
     });
     this.level = new LevelBuilder(
@@ -263,17 +288,23 @@ export default class SurvivalLevel {
       this.animations,
       firstLevelBlocks
     );
+
+    stateManager.setEnemyTankCounter(this.EnemySwarm);
   }
 
   EndlessSurvior = (id, dmg) => {
     let DeadEnemyCounte = [...this.EnemySwarm];
     DeadEnemyCounte.map((val) => {
+      stateManager.setEnemyDestroyCounter();
+
       if (val.id == id) {
         val.isAlive = dmg;
       }
     });
+
     let DestroyedTanks = DeadEnemyCounte.filter((val) => val.isAlive);
 
+    stateManager.setEnemyTankCounter(DestroyedTanks);
     let newArr = [...this.EnemySwarm];
 
     if (DestroyedTanks.length <= 0) {
@@ -287,59 +318,72 @@ export default class SurvivalLevel {
 
         return updatedEnemy;
       });
+      setTimeout(() => {
+        stateManager.setMoney(9);
+        stateManager.setEnemySwarm(newSwarm);
+        this.EnemySwarm = stateManager.getSharedState().enemySwarm;
+        stateManager.setEnemyTankCounter(this.EnemySwarm);
+        let newInstance = this.EnemySwarm.map((enemyTank) => {
+          const {
+            id,
+            x,
+            y,
+            tankWidth,
+            tankHeight,
+            hullSrc,
+            tracksSrc,
+            weaponSrc,
 
-      stateManager.setEnemySwarm(newSwarm);
-      this.EnemySwarm = stateManager.getSharedState().enemySwarm;
-      let newInstance = this.EnemySwarm.map((enemyTank) => {
-        const {
-          id,
-          x,
-          y,
-          tankWidth,
-          tankHeight,
-          hullSrc,
-          tracksSrc,
-          weaponSrc,
+            velocity,
+            obstacles,
+            lives,
+            demage,
+            isAlive,
+          } = enemyTank;
 
-          velocity,
-          obstacles,
-          lives,
-          demage,
-        } = enemyTank;
-
-        return new Enemy(
-          id,
-          x,
-          y,
-          tankWidth,
-          tankHeight,
-          hullSrc,
-          tracksSrc,
-          weaponSrc,
+          return new Enemy(
+            id,
+            x,
+            y,
+            tankWidth,
+            tankHeight,
+            hullSrc,
+            tracksSrc,
+            weaponSrc,
+            Screenwidth,
+            Screenheight,
+            velocity,
+            obstacles,
+            lives,
+            demage,
+            this.EndlessSurvior,
+            isAlive
+          );
+        });
+        this.level = new LevelBuilder(
+          this.tank,
+          this.background,
+          newInstance,
+          this.tank,
+          this.audio,
           Screenwidth,
           Screenheight,
-          velocity,
-          obstacles,
-          lives,
-          demage,
-          this.EndlessSurvior
+          this.animations,
+          firstLevelBlocks
         );
-      });
-      this.level = new LevelBuilder(
-        this.tank,
-        this.background,
-        newInstance,
-        this.tank,
-        this.audio,
-        Screenwidth,
-        Screenheight,
-        this.animations,
-        firstLevelBlocks
-      );
+      }, 3000);
     }
   };
 
+  getPoints() {
+    const { x, y, width, height, img, type, value } = drops[0];
+    return new Drops(x, y, width, height, img, type, value);
+  }
+  points = this.getPoints();
+
   drawLevel(ctx) {
+    this.points.draw(ctx);
+
     this.level.draw(ctx);
   }
 }

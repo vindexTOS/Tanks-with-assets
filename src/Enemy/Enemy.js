@@ -25,7 +25,8 @@ export default class Enemy {
     obstacles,
     enemyTankLife,
     demage,
-    EndlessSurvior
+    EndlessSurvior,
+    isAlive
   ) {
     this.id = id;
     this.x = x;
@@ -41,6 +42,7 @@ export default class Enemy {
     this.tracksSrc = tracksSrc;
     this.weaponSrc = weaponSrc;
     this.EndlessSurvior = EndlessSurvior;
+    this.isAlive = isAlive;
     this.hull = new Image();
     this.hull.src = this.hullSrc;
     this.tracks = new Image();
@@ -58,7 +60,10 @@ export default class Enemy {
   isHit = false;
 
   animationModule = new Animations();
-
+  pointsEXPArr = [
+    200, 300, 400, 100, 40, 650, 350, 20, 10, 6, 50, 2, 10, 1, 1, 1, 1, 400,
+    700,
+  ];
   isShoot = [false, true, false, true, false, true, true, true, true];
   enemyRandomMovmentMap = [
     "left",
@@ -214,15 +219,20 @@ export default class Enemy {
   getHit(x, y, index, demage) {
     const adjustedX = x - (this.x + this.width / 2);
     const adjustedY = y - (this.y + this.height / 2);
-    if (this.enemyTankLife <= 0) {
-      this.weapon.src = "";
-      this.EndlessSurvior(this.id, false);
-    }
+
     if (
       Math.abs(adjustedX) <= this.hitTreshhold &&
       Math.abs(adjustedY) <= this.hitTreshhold
     ) {
       this.enemyTankLife -= demage;
+
+      if (this.enemyTankLife >= 1) {
+        let randomPoints =
+          this.pointsEXPArr[
+            Math.floor(Math.random() * this.pointsEXPArr.length)
+          ];
+        stateManager.setMoney(randomPoints);
+      }
 
       stateManager.removeBullet(index, demage);
       const getHit = new Audio("assets/audio/HitMarker.mp3");
@@ -242,9 +252,13 @@ export default class Enemy {
       this.randomMovement();
       this.randomShooting();
       this.shoot();
+
       break;
     }
-
+    if (this.enemyTankLife === 0) {
+      this.weapon.src = "";
+      this.EndlessSurvior(this.id, false);
+    }
     ctx.drawImage(this.tracks, -this.width / 2.7, -this.height / 2.2, 15, 78);
     ctx.drawImage(this.tracks, -this.width / -5.7, -this.height / 2.2, 15, 78);
 

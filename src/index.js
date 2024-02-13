@@ -67,34 +67,86 @@ function handleMovement() {
   }
 }
 // menu
+//  store
+let money = document.getElementById("money");
+
+money.style.display = "none";
+
+let store = document.getElementById("store");
+store.style.display = "none";
+
+let openStore = document.getElementById("storeOpen");
+let closeStore = document.getElementById("close-store");
+openStore.addEventListener("click", () => {
+  store.style.display = "flex";
+  stateManager.Start();
+  start = stateManager.getSharedState().start;
+});
+closeStore.addEventListener("click", () => {
+  store.style.display = "none";
+  stateManager.Start();
+  start = stateManager.getSharedState().start;
+  requestAnimationFrame(gameLoop);
+});
+// start
 
 let stats = document.getElementById("stats");
 stats.style.display = "flex";
 let menu = document.getElementById("menu");
-let start = false;
-
+let start = stateManager.getSharedState().start;
 const startBtn = document.getElementById("start");
 startBtn.addEventListener("click", () => {
-  start = true;
+  stateManager.Start();
+
+  start = stateManager.getSharedState().start;
+
   requestAnimationFrame(gameLoop);
+  menu.style.display = "none";
+  money.style.display = "flex";
+  pause.style.display = "flex";
+  canvas.style.display = "flex";
+  stats.style.display = "flex";
+});
+
+// pause
+let pause = document.getElementById("pause");
+pause.style.display = "none";
+pause.addEventListener("click", () => {
+  stateManager.Start();
+  start = stateManager.getSharedState().start;
+  requestAnimationFrame(gameLoop);
+
   menu.style.display = "none";
   canvas.style.display = "flex";
   stats.style.display = "flex";
 });
+//
+
 // stats menu
-
-function drawHeart() {
+function drawStats() {
   const numLives = stateManager.getSharedState().tankLives;
-
-  document.getElementById("stats").innerHTML = "";
+  const enemyCount = stateManager.getSharedState().enemyCount;
+  const roundCount = stateManager.getSharedState().survivalLevel;
+  document.getElementById("lives").innerHTML = "";
+  let points = stateManager.getSharedState().playerPoints;
 
   for (let i = 0; i < numLives; i++) {
     let newImg = document.createElement("img");
 
     newImg.src = "./assets/images/life.png";
     newImg.style.width = "50px";
-    document.getElementById("stats").appendChild(newImg);
+    document.getElementById("lives").appendChild(newImg);
   }
+  document.getElementById("enemyTanks").innerHTML = "";
+  for (let i = 0; i < enemyCount; i++) {
+    let newImg = document.createElement("img");
+
+    newImg.src = "./assets/images/enemyTankCount.png";
+    newImg.style.width = "50px";
+    document.getElementById("enemyTanks").appendChild(newImg);
+  }
+  document.getElementById("rounds").innerHTML = `Round: ${roundCount}`;
+  money.innerHTML = `$ ${points}`;
 }
 //  movments
 document.addEventListener("keydown", handleKeyDown);
@@ -127,7 +179,7 @@ const survivalLevel = new SurvivalLevel(tank, background, audio, animations);
 function gameLoop() {
   if (start) {
     handleMovement();
-    drawHeart();
+    drawStats();
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(background, 0, 0, width, height);
 
