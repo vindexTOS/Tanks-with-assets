@@ -46,3 +46,11 @@ export let survivalDrops = [
   //     value: 1000,
   //   },
 ];
+
+export let dropPossitionsAndTimes = [200, 400, 700, 1000, 1200];
+export let dropTimeIntervalTime = [
+  { start: 10, end: 200 },
+  { start: 200, end: 400 },
+  { start: 400, end: 800 },
+  { start: 700, end: 1000 },
+];

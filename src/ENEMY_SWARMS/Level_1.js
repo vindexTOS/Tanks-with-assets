@@ -4,7 +4,12 @@ import Enemy from "../Enemy/Enemy.js";
 import LevelBuilder from "../Levels/Level_Builder.js";
 import stateManager from "../Store/StateManager.js";
 import Drops from "../Drops/Drops.js";
-import { survivalDrops as drops } from "../Drops/SurvivalLevelDrops.js";
+import {
+  survivalDrops as drops,
+  dropPossitionsAndTimes,
+  dropTimeIntervalTime,
+} from "../Drops/SurvivalLevelDrops.js";
+
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 
@@ -365,22 +370,48 @@ export default class SurvivalLevel {
   };
   randomIndex = Math.floor(Math.random() * drops.length);
   newDrop = drops[this.randomIndex];
+  possiblePosstions = [300, 350, 400];
   getPoints() {
+    this.randomIndex = Math.floor(Math.random() * drops.length);
+    this.newDrop = drops[this.randomIndex];
     const { x, y, width, height, img, type, value, isActive } = this.newDrop;
     return new Drops(x, y, width, height, img, type, value, isActive);
   }
+  points = null;
 
-  points = this.getPoints();
+  pickARandomSpot() {
+    this.randomIndex = Math.floor(Math.random() * drops.length);
+    this.newDrop = drops[this.randomIndex];
+    this.newDrop.x =
+      this.possiblePosstions[
+        Math.floor(Math.random() * this.possiblePosstions.length)
+      ];
+    this.newDrop.isActive = true;
+    console.log(this.points);
+  }
+
+  dropTimeSetter(i) {
+    dropPossitionsAndTimes.forEach((val) => {
+      if (val === i) {
+        console.log(i);
+        this.pickARandomSpot();
+      }
+    });
+  }
+  dropTimeIntervalSetter(i, ctx) {
+    dropTimeIntervalTime.forEach((val) => {
+      const { start, end } = val;
+      if (i >= start && i <= end) {
+        // this.pickARandomSpot();
+        return this.points.draw(ctx);
+      }
+    });
+  }
   dropSelector(i, ctx) {
+    this.points = this.getPoints();
     this.pickUpDrop({ ...this.points });
-    if (i === 400) this.randomIndex = Math.floor(Math.random() * drops.length);
-
-    if (i >= 1 && i <= 200) {
-      return this.points.draw(ctx);
-    } else if (i >= 400) {
-      return this.points.draw(ctx);
-    } else {
-    }
+    this.dropTimeSetter(i);
+    this.dropTimeIntervalSetter(i, ctx);
   }
 
   pickUpDrop({
@@ -408,8 +439,8 @@ export default class SurvivalLevel {
 
     if (distance <= combinedRadius) {
       this.newDrop.isActive = false;
-      this.newDrop.x = 5000;
-      stateManager.setDrop({ type, value: value / 2 });
+      this.newDrop.x = 3300;
+      stateManager.setDrop({ type, value });
     }
   }
 
