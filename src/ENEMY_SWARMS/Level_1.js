@@ -312,62 +312,66 @@ export default class SurvivalLevel {
 
         return updatedEnemy;
       });
-      setTimeout(() => {
-        stateManager.setMoney(9);
-        stateManager.setEnemySwarm(newSwarm);
-        this.EnemySwarm = stateManager.getSharedState().enemySwarm;
-        stateManager.setEnemyTankCounter(this.EnemySwarm);
-        let newInstance = this.EnemySwarm.map((enemyTank) => {
-          const {
-            id,
-            x,
-            y,
-            tankWidth,
-            tankHeight,
-            hullSrc,
-            tracksSrc,
-            weaponSrc,
 
-            velocity,
-            obstacles,
-            lives,
-            demage,
-            isAlive,
-          } = enemyTank;
+      if (stateManager.getSharedState().start) {
+        setTimeout(() => {
+          stateManager.setMoney(9);
+          stateManager.setEnemySwarm(newSwarm);
+          this.EnemySwarm = stateManager.getSharedState().enemySwarm;
+          stateManager.setEnemyTankCounter(this.EnemySwarm);
+          let newInstance = this.EnemySwarm.map((enemyTank) => {
+            const {
+              id,
+              x,
+              y,
+              tankWidth,
+              tankHeight,
+              hullSrc,
+              tracksSrc,
+              weaponSrc,
 
-          return new Enemy(
-            id,
-            x,
-            y,
-            tankWidth,
-            tankHeight,
-            hullSrc,
-            tracksSrc,
-            weaponSrc,
+              velocity,
+              obstacles,
+              lives,
+              demage,
+              isAlive,
+            } = enemyTank;
+
+            return new Enemy(
+              id,
+              x,
+              y,
+              tankWidth,
+              tankHeight,
+              hullSrc,
+              tracksSrc,
+              weaponSrc,
+              Screenwidth,
+              Screenheight,
+              velocity,
+              obstacles,
+              lives,
+              demage,
+              this.EndlessSurvior,
+              isAlive
+            );
+          });
+          this.level = new LevelBuilder(
+            this.tank,
+            this.background,
+            newInstance,
+            this.tank,
+            this.audio,
             Screenwidth,
             Screenheight,
-            velocity,
-            obstacles,
-            lives,
-            demage,
-            this.EndlessSurvior,
-            isAlive
+            this.animations,
+            firstLevelBlocks
           );
-        });
-        this.level = new LevelBuilder(
-          this.tank,
-          this.background,
-          newInstance,
-          this.tank,
-          this.audio,
-          Screenwidth,
-          Screenheight,
-          this.animations,
-          firstLevelBlocks
-        );
-      }, 3000);
+        }, 3000);
+      }
     }
   };
+  //  random drop funcctionality
   randomIndex = Math.floor(Math.random() * drops.length);
   newDrop = drops[this.randomIndex];
   possiblePosstions = [300, 350, 400];

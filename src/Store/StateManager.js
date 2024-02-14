@@ -14,6 +14,7 @@ class StateManager {
         destroyedEnemies: 0,
         survivalLevel: 1,
         playerPoints: 0,
+        isRoundOver: true,
       };
       StateManager.instance = this;
     }
@@ -28,6 +29,9 @@ class StateManager {
 
   Start() {
     this.sharedState.start = !this.sharedState.start;
+  }
+  setStart(bool) {
+    this.sharedState.start = bool;
   }
   OpenStore() {
     this.sharedState.openStore = !this.sharedState.openStore;
@@ -80,6 +84,11 @@ class StateManager {
   // surival
   setSurvivalLevel() {
     this.sharedState.survivalLevel += 1;
+  }
+  setIsRoundOver(bool) {
+    this.sharedState.isRoundOver = bool;
+    this.sharedState.openStore = bool;
+    this.sharedState.start = bool;
   }
 }
 

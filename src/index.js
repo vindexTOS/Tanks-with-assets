@@ -17,6 +17,7 @@ const background = new Image();
 const { hull, tracks, weapone } = PlayerTank;
 const animations = new Animations();
 
+const { start } = stateManager.getSharedState();
 background.src = "assets/images/original.jpg";
 
 const keys = {
@@ -79,25 +80,27 @@ let closeStore = document.getElementById("close-store");
 openStore.addEventListener("click", () => {
   store.style.display = "flex";
   stateManager.Start();
-  start = stateManager.getSharedState().start;
 });
 closeStore.addEventListener("click", () => {
   store.style.display = "none";
   stateManager.Start();
-  start = stateManager.getSharedState().start;
+
   requestAnimationFrame(gameLoop);
 });
 // start
 
+// TEST
+
+document.getElementById("test").addEventListener("click", () => {
+  console.log(start);
+});
+
 let stats = document.getElementById("stats");
 stats.style.display = "flex";
 let menu = document.getElementById("menu");
-let start = stateManager.getSharedState().start;
 const startBtn = document.getElementById("start");
 startBtn.addEventListener("click", () => {
-  stateManager.Start();
-
-  start = stateManager.getSharedState().start;
+  stateManager.setStart(true);
 
   requestAnimationFrame(gameLoop);
   menu.style.display = "none";
@@ -112,7 +115,7 @@ let pause = document.getElementById("pause");
 pause.style.display = "none";
 pause.addEventListener("click", () => {
   stateManager.Start();
-  start = stateManager.getSharedState().start;
+
   requestAnimationFrame(gameLoop);
 
   menu.style.display = "none";
@@ -182,7 +185,7 @@ const survivalLevel = new SurvivalLevel(
   ctx
 );
 function gameLoop() {
-  if (start) {
+  if (stateManager.getSharedState().start) {
     handleMovement();
     drawStats();
     ctx.clearRect(0, 0, width, height);
