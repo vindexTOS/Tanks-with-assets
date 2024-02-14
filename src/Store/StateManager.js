@@ -38,6 +38,9 @@ class StateManager {
   }
   setDrop(drop) {
     this.sharedState.drop = drop;
+    if (drop.type == "xp") {
+      this.sharedState.playerPoints += drop.value;
+    }
   }
   // life
   removeLife() {

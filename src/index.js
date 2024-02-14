@@ -6,7 +6,6 @@ import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
 import Animations from "./Animations/Animations.js";
 import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
 import SurvivalLevel from "./ENEMY_SWARMS/Level_1.js";
-
 const canvas = document.getElementById("game");
 canvas.style.display = "none";
 const audio = document.getElementById("audio");
@@ -175,7 +174,13 @@ const tank = new Tank(
   height,
   firstLevelBlocks
 );
-const survivalLevel = new SurvivalLevel(tank, background, audio, animations);
+const survivalLevel = new SurvivalLevel(
+  tank,
+  background,
+  audio,
+  animations,
+  ctx
+);
 function gameLoop() {
   if (start) {
     handleMovement();

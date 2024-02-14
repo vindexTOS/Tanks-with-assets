@@ -4,6 +4,7 @@ import Enemy from "../Enemy/Enemy.js";
 import LevelBuilder from "../Levels/Level_Builder.js";
 import stateManager from "../Store/StateManager.js";
 import Drops from "../Drops/Drops.js";
+import { survivalDrops as drops } from "../Drops/SurvivalLevelDrops.js";
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
 
@@ -16,18 +17,6 @@ const Weapone = (color, weapon) => {
 const Tracks = [
   `${PngUrl}Tracks/Track_1_A.png`,
   `${PngUrl}Tracks/Track_2_A.png`,
-];
-
-let drops = [
-  {
-    y: 500,
-    x: 500,
-    width: 60,
-    height: 60,
-    img: "assets/images/XP.png",
-    type: "xp",
-    value: 3000,
-  },
 ];
 
 let EnemySwarm = [
@@ -374,16 +363,60 @@ export default class SurvivalLevel {
       }, 3000);
     }
   };
-
+  randomIndex = Math.floor(Math.random() * drops.length);
+  newDrop = drops[this.randomIndex];
   getPoints() {
-    const { x, y, width, height, img, type, value } = drops[0];
-    return new Drops(x, y, width, height, img, type, value);
+    const { x, y, width, height, img, type, value, isActive } = this.newDrop;
+    return new Drops(x, y, width, height, img, type, value, isActive);
   }
+
   points = this.getPoints();
+  dropSelector(i, ctx) {
+    this.pickUpDrop({ ...this.points });
+    if (i === 400) this.randomIndex = Math.floor(Math.random() * drops.length);
 
+    if (i >= 1 && i <= 200) {
+      return this.points.draw(ctx);
+    } else if (i >= 400) {
+      return this.points.draw(ctx);
+    } else {
+    }
+  }
+
+  pickUpDrop({
+    x: dropX,
+    y: dropY,
+    width,
+    height,
+    img,
+    type,
+    value,
+    isActive,
+  }) {
+    this.points = this.getPoints();
+    const radiusX = width / 3;
+    const radiusY = height / 2;
+    const combinedRadius =
+      Math.max(width / 2, height / 2) + Math.max(radiusX, radiusY) + 20;
+
+    const tankCenterX = this.tank.x + this.tank.width / 4;
+    const tankCenterY = this.tank.y + this.tank.height / 4;
+
+    const distance = Math.sqrt(
+      Math.pow(tankCenterX - dropX, 2) + Math.pow(tankCenterY - dropY, 2)
+    );
+
+    if (distance <= combinedRadius) {
+      this.newDrop.isActive = false;
+      this.newDrop.x = 5000;
+      stateManager.setDrop({ type, value: value / 2 });
+    }
+  }
+
+  i = 0;
   drawLevel(ctx) {
-    this.points.draw(ctx);
-
+    this.i++;
+    this.dropSelector(this.i, ctx);
     this.level.draw(ctx);
   }
 }

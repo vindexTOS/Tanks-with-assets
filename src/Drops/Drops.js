@@ -1,5 +1,5 @@
 export default class Drops {
-  constructor(x, y, width, height, img, type, value) {
+  constructor(x, y, width, height, img, type, value, isActive) {
     (this.x = x),
       (this.y = y),
       (this.width = width),
@@ -8,16 +8,27 @@ export default class Drops {
       (this.type = type),
       (this.value = value);
     this.photo.src = img;
+    this.isActive = isActive;
+  }
+
+  showDrop(bool) {
+    this.isActive = bool
   }
 
   draw(ctx) {
-    ctx.save();
-    ctx.drawImage(this.photo, this.x, this.y, this.width, this.width);
-    ctx.font = "12px Arial"; // Set the font style
-    ctx.fillStyle = "white"; // Set the text color
-    ctx.textAlign = "center"; // Center the text horizontally
-    ctx.fillText(this.value, this.x + this.width / 2, this.y + this.width + 15);
+    if (this.isActive) {
+      ctx.save();
+      ctx.drawImage(this.photo, this.x, this.y, this.width, this.width);
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        this.value,
+        this.x + this.width / 2,
+        this.y + this.width + 15
+      );
 
-    ctx.restore();
+      ctx.restore();
+    }
   }
 }
