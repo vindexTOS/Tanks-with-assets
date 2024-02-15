@@ -43,8 +43,15 @@ class StateManager {
   }
   setDrop(drop) {
     this.sharedState.drop = drop;
-    if (drop.type == "xp") {
-      this.sharedState.playerPoints += drop.value;
+    switch (drop.type) {
+      case "xp":
+        this.sharedState.playerPoints += drop.value;
+        break;
+      case "life":
+        this.sharedState.tankLives += drop.value;
+        break;
+      default:
+        break;
     }
   }
   // life
@@ -79,7 +86,7 @@ class StateManager {
   setEnemyTankCounter(arr) {
     this.sharedState.enemyCount = arr.length;
   }
-  setEnemyDestroyCounter( ) {
+  setEnemyDestroyCounter() {
     this.sharedState.destroyedEnemies++;
   }
   // surival

@@ -231,7 +231,7 @@ export default class SurvivalLevel {
     this.audio = audio;
     this.animations = animations;
     this.startSecondRound = this.startSecondRound.bind(this);
-
+    this.isDropped = false;
     stateManager.setEnemySwarm(EnemySwarm);
 
     this.EnemySwarm = stateManager.getSharedState().enemySwarm;
@@ -396,7 +396,6 @@ export default class SurvivalLevel {
         Math.floor(Math.random() * this.possiblePosstions.length)
       ];
     this.newDrop.isActive = true;
-    console.log(this.points);
   }
 
   dropTimeSetter(i) {
