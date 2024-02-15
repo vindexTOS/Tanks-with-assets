@@ -9,10 +9,9 @@ import {
   dropPossitionsAndTimes,
   dropTimeIntervalTime,
 } from "../Drops/SurvivalLevelDrops.js";
-
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
-const startRound = document.getElementsByName("round-start");
+
 const Hull = (color, hull) => {
   return `assets/PNG/Hulls_Color_${color}/Hull_0${hull}.png`;
 };
@@ -23,6 +22,7 @@ const Tracks = [
   `${PngUrl}Tracks/Track_1_A.png`,
   `${PngUrl}Tracks/Track_2_A.png`,
 ];
+let roundStartBtn = document.getElementById("round-start");
 
 let EnemySwarm = [
   {
@@ -291,15 +291,12 @@ export default class SurvivalLevel {
   EndlessSurvior = (id, dmg) => {
     let DeadEnemyCounte = [...this.EnemySwarm];
     DeadEnemyCounte.map((val) => {
-      stateManager.setEnemyDestroyCounter();
-
       if (val.id == id) {
         val.isAlive = dmg;
       }
     });
 
     let DestroyedTanks = DeadEnemyCounte.filter((val) => val.isAlive);
-
     stateManager.setEnemyTankCounter(DestroyedTanks);
     let newArr = [...this.EnemySwarm];
 
@@ -312,72 +309,19 @@ export default class SurvivalLevel {
           isAlive: true,
         };
         this.isRoundEnd = true;
+        stateManager.setIsRoundBtnShow();
+        roundStartBtn.style.display = "flex";
         return updatedEnemy;
       });
-
-      // if (stateManager.getSharedState().start) {
-      //   setTimeout(() => {
-      //     stateManager.setMoney(9);
-      //     stateManager.setEnemySwarm(newSwarm);
-      //     this.EnemySwarm = stateManager.getSharedState().enemySwarm;
-      //     stateManager.setEnemyTankCounter(this.EnemySwarm);
-      //     let newInstance = this.EnemySwarm.map((enemyTank) => {
-      //       const {
-      //         id,
-      //         x,
-      //         y,
-      //         tankWidth,
-      //         tankHeight,
-      //         hullSrc,
-      //         tracksSrc,
-      //         weaponSrc,
-
-      //         velocity,
-      //         obstacles,
-      //         lives,
-      //         demage,
-      //         isAlive,
-      //       } = enemyTank;
-
-      //       return new Enemy(
-      //         id,
-      //         x,
-      //         y,
-      //         tankWidth,
-      //         tankHeight,
-      //         hullSrc,
-      //         tracksSrc,
-      //         weaponSrc,
-      //         Screenwidth,
-      //         Screenheight,
-      //         velocity,
-      //         obstacles,
-      //         lives,
-      //         demage,
-      //         this.EndlessSurvior,
-      //         isAlive
-      //       );
-      //     });
-      //     this.level = new LevelBuilder(
-      //       this.tank,
-      //       this.background,
-      //       newInstance,
-      //       this.tank,
-      //       this.audio,
-      //       Screenwidth,
-      //       Screenheight,
-      //       this.animations,
-      //       firstLevelBlocks
-      //     );
-      //   }, 3000);
-      // }
     }
   };
 
   startSecondRound() {
     if (this.isRoundEnd) {
-      console.log(this.isRoundEnd);
+      stateManager.setIsRoundOver(false);
       this.isRoundEnd = false;
+      roundStartBtn.style.display = "none";
+      stateManager.setSurvivalLevel();
       stateManager.setMoney(9);
       stateManager.setEnemySwarm(this.newSwarm);
       this.EnemySwarm = stateManager.getSharedState().enemySwarm;
@@ -458,7 +402,6 @@ export default class SurvivalLevel {
   dropTimeSetter(i) {
     dropPossitionsAndTimes.forEach((val) => {
       if (val === i) {
-        console.log(i);
         this.pickARandomSpot();
       }
     });

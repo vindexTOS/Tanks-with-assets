@@ -15,6 +15,7 @@ class StateManager {
         survivalLevel: 1,
         playerPoints: 0,
         isRoundOver: true,
+        isRoundBtnShow: false,
       };
       StateManager.instance = this;
     }
@@ -78,7 +79,7 @@ class StateManager {
   setEnemyTankCounter(arr) {
     this.sharedState.enemyCount = arr.length;
   }
-  setEnemyDestroyCounter() {
+  setEnemyDestroyCounter( ) {
     this.sharedState.destroyedEnemies++;
   }
   // surival
@@ -87,8 +88,9 @@ class StateManager {
   }
   setIsRoundOver(bool) {
     this.sharedState.isRoundOver = bool;
-    this.sharedState.openStore = bool;
-    this.sharedState.start = bool;
+  }
+  setIsRoundBtnShow(bool) {
+    this.sharedState.isRoundBtnShow = bool;
   }
 }
 

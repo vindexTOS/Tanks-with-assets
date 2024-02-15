@@ -18,7 +18,6 @@ const background = new Image();
 const { hull, tracks, weapone } = PlayerTank;
 const animations = new Animations();
 
-const { start } = stateManager.getSharedState();
 background.src = "assets/images/original.jpg";
 
 const keys = {
@@ -128,6 +127,7 @@ function drawStats() {
   const numLives = stateManager.getSharedState().tankLives;
   const enemyCount = stateManager.getSharedState().enemyCount;
   const roundCount = stateManager.getSharedState().survivalLevel;
+  const kills = stateManager.getSharedState().destroyedEnemies;
   document.getElementById("lives").innerHTML = "";
   let points = stateManager.getSharedState().playerPoints;
 
@@ -146,9 +146,13 @@ function drawStats() {
     newImg.style.width = "50px";
     document.getElementById("enemyTanks").appendChild(newImg);
   }
-  document.getElementById("rounds").innerHTML = `Round: ${roundCount}`;
+  // rounds
+  document.getElementById("rounds").innerHTML = `Round: ${roundCount} `;
+  //  kill count
+  document.getElementById("kills").innerHTML = `Kills: ${kills}`;
   money.innerHTML = `$ ${points}`;
 }
+
 //  movments
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
@@ -184,8 +188,9 @@ const survivalLevel = new SurvivalLevel(
   ctx
 );
 
-document.getElementById("round-start").addEventListener("click", () => {
- 
+let roundStartBtn = document.getElementById("round-start");
+roundStartBtn.style.display = "none";
+roundStartBtn.addEventListener("click", () => {
   survivalLevel.startSecondRound();
 });
 function gameLoop() {

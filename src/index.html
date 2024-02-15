@@ -132,6 +132,7 @@
         box-shadow: 0 0 5px #ff1f71, 0 0 15px #ff1f71, 0 0 30px #ff1f71,
           0 0 60px #ff1f71;
       }
+      #kills,
       #money,
       #storeOpen,
       #pause {
@@ -163,6 +164,29 @@
       #rounds {
         color: white;
       }
+      #round-start {
+        z-index: 5000;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        position: absolute;
+        top: 70%;
+        left: 45%;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 13px 23px;
+        border: 1px solid #222222;
+        transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s,
+          -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+        background: #fff;
+        color: #222222;
+      }
+      #round-start :hover {
+        border-color: #000000;
+        background: #f7f7f7;
+      }
     </style>
   </head>
 
@@ -175,14 +199,15 @@
       <div id="enemyTanks"></div>
       <div id="rounds"></div>
       <div id="money"></div>
+      <div id="kills"></div>
       <button id="test">TEST</button>
-      <button id="round-start">Tstart round</button>
     </div>
+    <button id="round-start">Next Round</button>
     <div id="store">
       <button id="close-store">Close</button>
     </div>
     <script type="module" src="index.js"></script>
-    <!-- <script type="module" src="ENEMY_SWARMS/Level_1.js"></script> -->
+    <script type="module" src="ENEMY_SWARMS/Level_1.js"></script>
 
     <audio id="audio" controls></audio>
 

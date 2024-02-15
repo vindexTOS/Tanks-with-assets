@@ -70,7 +70,7 @@ export default class Tank {
       velocity: 8,
       lifes: stateManager.getSharedState().tankLives,
       demage: 1,
-      bulletSpeed: 7,
+      bulletSpeed: 17,
       shield: 0,
       money: stateManager.getSharedState().playerPoints,
     };

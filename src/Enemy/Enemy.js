@@ -46,6 +46,7 @@ export default class Enemy {
     this.hull = new Image();
     this.hull.src = this.hullSrc;
     this.tracks = new Image();
+    this.hasRunOnce = false;
 
     this.tracks.src = this.tracksSrc[0];
 
@@ -246,6 +247,11 @@ export default class Enemy {
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
 
     ctx.rotate(this.rotation);
+
+    if (this.enemyTankLife <= 0 && !this.hasRunOnce) {
+      this.hasRunOnce = true;
+      stateManager.setEnemyDestroyCounter();
+    }
     while (this.enemyTankLife > 0) {
       this.animationModule.gasAnimation(ctx);
       this.tracks.src = this.tracksSrc[Math.floor(Math.random() * 2)];
@@ -255,7 +261,8 @@ export default class Enemy {
 
       break;
     }
-    if (this.enemyTankLife === 0) {
+
+    if (this.enemyTankLife === 0 || this.enemyTankLife <= 0) {
       this.weapon.src = "";
       this.EndlessSurvior(this.id, false);
     }
