@@ -24,6 +24,8 @@ export default class LevelBuilder {
     this.ObstacleBlocks = ObstacleBlocks;
   }
  
+ 
+
   draw(ctx) {
     this.player.draw(ctx);
     this.EnemySwarm.forEach((enemy) => {
@@ -51,3 +53,5 @@ export default class LevelBuilder {
     });
   }
 }
+ 
+

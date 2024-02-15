@@ -12,7 +12,7 @@ import {
 
 const PngUrl = "assets/PNG/";
 const EffectUrl = `${PngUrl}Effects/Sprites/`;
-
+const startRound = document.getElementsByName("round-start");
 const Hull = (color, hull) => {
   return `assets/PNG/Hulls_Color_${color}/Hull_0${hull}.png`;
 };
@@ -230,6 +230,7 @@ export default class SurvivalLevel {
     this.background = background;
     this.audio = audio;
     this.animations = animations;
+    this.startSecondRound = this.startSecondRound.bind(this);
 
     stateManager.setEnemySwarm(EnemySwarm);
 
@@ -285,7 +286,8 @@ export default class SurvivalLevel {
 
     stateManager.setEnemyTankCounter(this.EnemySwarm);
   }
-
+  newSwarm = null;
+  isRoundEnd = false;
   EndlessSurvior = (id, dmg) => {
     let DeadEnemyCounte = [...this.EnemySwarm];
     DeadEnemyCounte.map((val) => {
@@ -302,75 +304,134 @@ export default class SurvivalLevel {
     let newArr = [...this.EnemySwarm];
 
     if (DestroyedTanks.length <= 0) {
-      let newSwarm = newArr.map((val) => {
+      this.newSwarm = newArr.map((val) => {
         const updatedEnemy = {
           ...val,
           lives: val.lives + 1,
           velocity: val.velocity + 1,
           isAlive: true,
         };
-
+        this.isRoundEnd = true;
         return updatedEnemy;
       });
 
-      if (stateManager.getSharedState().start) {
-        setTimeout(() => {
-          stateManager.setMoney(9);
-          stateManager.setEnemySwarm(newSwarm);
-          this.EnemySwarm = stateManager.getSharedState().enemySwarm;
-          stateManager.setEnemyTankCounter(this.EnemySwarm);
-          let newInstance = this.EnemySwarm.map((enemyTank) => {
-            const {
-              id,
-              x,
-              y,
-              tankWidth,
-              tankHeight,
-              hullSrc,
-              tracksSrc,
-              weaponSrc,
+      // if (stateManager.getSharedState().start) {
+      //   setTimeout(() => {
+      //     stateManager.setMoney(9);
+      //     stateManager.setEnemySwarm(newSwarm);
+      //     this.EnemySwarm = stateManager.getSharedState().enemySwarm;
+      //     stateManager.setEnemyTankCounter(this.EnemySwarm);
+      //     let newInstance = this.EnemySwarm.map((enemyTank) => {
+      //       const {
+      //         id,
+      //         x,
+      //         y,
+      //         tankWidth,
+      //         tankHeight,
+      //         hullSrc,
+      //         tracksSrc,
+      //         weaponSrc,
 
-              velocity,
-              obstacles,
-              lives,
-              demage,
-              isAlive,
-            } = enemyTank;
+      //         velocity,
+      //         obstacles,
+      //         lives,
+      //         demage,
+      //         isAlive,
+      //       } = enemyTank;
 
-            return new Enemy(
-              id,
-              x,
-              y,
-              tankWidth,
-              tankHeight,
-              hullSrc,
-              tracksSrc,
-              weaponSrc,
-              Screenwidth,
-              Screenheight,
-              velocity,
-              obstacles,
-              lives,
-              demage,
-              this.EndlessSurvior,
-              isAlive
-            );
-          });
-          this.level = new LevelBuilder(
-            this.tank,
-            this.background,
-            newInstance,
-            this.tank,
-            this.audio,
-            Screenwidth,
-            Screenheight,
-            this.animations,
-            firstLevelBlocks
-          );
-        }, 3000);
-      }
+      //       return new Enemy(
+      //         id,
+      //         x,
+      //         y,
+      //         tankWidth,
+      //         tankHeight,
+      //         hullSrc,
+      //         tracksSrc,
+      //         weaponSrc,
+      //         Screenwidth,
+      //         Screenheight,
+      //         velocity,
+      //         obstacles,
+      //         lives,
+      //         demage,
+      //         this.EndlessSurvior,
+      //         isAlive
+      //       );
+      //     });
+      //     this.level = new LevelBuilder(
+      //       this.tank,
+      //       this.background,
+      //       newInstance,
+      //       this.tank,
+      //       this.audio,
+      //       Screenwidth,
+      //       Screenheight,
+      //       this.animations,
+      //       firstLevelBlocks
+      //     );
+      //   }, 3000);
+      // }
     }
   };
+
+  startSecondRound() {
+    if (this.isRoundEnd) {
+      console.log(this.isRoundEnd);
+      this.isRoundEnd = false;
+      stateManager.setMoney(9);
+      stateManager.setEnemySwarm(this.newSwarm);
+      this.EnemySwarm = stateManager.getSharedState().enemySwarm;
+      stateManager.setEnemyTankCounter(this.EnemySwarm);
+      let newInstance = this.EnemySwarm.map((enemyTank) => {
+        const {
+          id,
+          x,
+          y,
+          tankWidth,
+          tankHeight,
+          hullSrc,
+          tracksSrc,
+          weaponSrc,
+
+          velocity,
+          obstacles,
+          lives,
+          demage,
+          isAlive,
+        } = enemyTank;
+
+        return new Enemy(
+          id,
+          x,
+          y,
+          tankWidth,
+          tankHeight,
+          hullSrc,
+          tracksSrc,
+          weaponSrc,
+          Screenwidth,
+          Screenheight,
+          velocity,
+          obstacles,
+          lives,
+          demage,
+          this.EndlessSurvior,
+          isAlive
+        );
+      });
+      this.level = new LevelBuilder(
+        this.tank,
+        this.background,
+        newInstance,
+        this.tank,
+        this.audio,
+        Screenwidth,
+        Screenheight,
+        this.animations,
+        firstLevelBlocks
+      );
+    }
+  }
   //  random drop funcctionality
   randomIndex = Math.floor(Math.random() * drops.length);
   newDrop = drops[this.randomIndex];

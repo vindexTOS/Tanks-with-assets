@@ -6,6 +6,7 @@ import { Screenwidth, Screenheight } from "./Globals/GLOBAL.js";
 import Animations from "./Animations/Animations.js";
 import { firstLevelBlocks } from "./Obstacles/ObstaclesModel.js";
 import SurvivalLevel from "./ENEMY_SWARMS/Level_1.js";
+
 const canvas = document.getElementById("game");
 canvas.style.display = "none";
 const audio = document.getElementById("audio");
@@ -91,9 +92,7 @@ closeStore.addEventListener("click", () => {
 
 // TEST
 
-document.getElementById("test").addEventListener("click", () => {
-  console.log(start);
-});
+document.getElementById("test").addEventListener("click", () => {});
 
 let stats = document.getElementById("stats");
 stats.style.display = "flex";
@@ -184,6 +183,11 @@ const survivalLevel = new SurvivalLevel(
   animations,
   ctx
 );
+
+document.getElementById("round-start").addEventListener("click", () => {
+ 
+  survivalLevel.startSecondRound();
+});
 function gameLoop() {
   if (stateManager.getSharedState().start) {
     handleMovement();
