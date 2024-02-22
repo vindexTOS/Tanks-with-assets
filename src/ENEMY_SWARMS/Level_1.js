@@ -224,6 +224,12 @@ let EnemySwarm = [
   //   isAlive: true,
   // },
 ];
+
+let randomItem = [
+  { type: "xp", value: 3000, img: "assets/images/XP.png" },
+  { type: "life", value: 1, img: "assets/images/life.png" },
+];
+
 export default class SurvivalLevel {
   constructor(tank, background, audio, animations) {
     this.tank = tank;
@@ -233,6 +239,7 @@ export default class SurvivalLevel {
     this.startSecondRound = this.startSecondRound.bind(this);
     this.isDropped = false;
     stateManager.setEnemySwarm(EnemySwarm);
+    this.randomIndex = Math.floor(Math.random() * drops.length);
 
     this.EnemySwarm = stateManager.getSharedState().enemySwarm;
     this.enemyTankInstances = this.EnemySwarm.map((enemyTank) => {
@@ -318,6 +325,17 @@ export default class SurvivalLevel {
 
   startSecondRound() {
     if (this.isRoundEnd) {
+      let randomIndex = Math.floor(Math.random() * randomItem.length);
+      const { type, value, img } = randomItem[randomIndex];
+      this.i = 0;
+      this.newDrop.isActive = true;
+      this.newDrop.x =
+        dropPossitionsAndTimes[
+          Math.floor(Math.random() * dropPossitionsAndTimes.length)
+        ];
+      this.newDrop.img = img;
+      this.newDrop.type = type;
+      this.newDrop.value = value;
       stateManager.setIsRoundOver(false);
       this.isRoundEnd = false;
       roundStartBtn.style.display = "none";
@@ -377,7 +395,6 @@ export default class SurvivalLevel {
     }
   }
   //  random drop funcctionality
-  randomIndex = Math.floor(Math.random() * drops.length);
   newDrop = drops[this.randomIndex];
   possiblePosstions = [300, 350, 400];
   getPoints() {
@@ -390,17 +407,20 @@ export default class SurvivalLevel {
 
   pickARandomSpot() {
     this.randomIndex = Math.floor(Math.random() * drops.length);
+    console.log(drops);
     this.newDrop = drops[this.randomIndex];
     this.newDrop.x =
       this.possiblePosstions[
         Math.floor(Math.random() * this.possiblePosstions.length)
       ];
+    console.log(this.newDrop.x);
     this.newDrop.isActive = true;
   }
 
   dropTimeSetter(i) {
     dropPossitionsAndTimes.forEach((val) => {
       if (val === i) {
+        console.log(val, i);
         this.pickARandomSpot();
       }
     });
@@ -408,8 +428,8 @@ export default class SurvivalLevel {
   dropTimeIntervalSetter(i, ctx) {
     dropTimeIntervalTime.forEach((val) => {
       const { start, end } = val;
+
       if (i >= start && i <= end) {
-        // this.pickARandomSpot();
         return this.points.draw(ctx);
       }
     });
@@ -417,7 +437,6 @@ export default class SurvivalLevel {
   dropSelector(i, ctx) {
     this.points = this.getPoints();
     this.pickUpDrop({ ...this.points });
-    this.dropTimeSetter(i);
     this.dropTimeIntervalSetter(i, ctx);
   }
 
@@ -453,6 +472,8 @@ export default class SurvivalLevel {
 
   i = 0;
   drawLevel(ctx) {
+    console.log(this.newDrop);
+
     this.i++;
     this.dropSelector(this.i, ctx);
     this.level.draw(ctx);
